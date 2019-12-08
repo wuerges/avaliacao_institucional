@@ -36,3 +36,51 @@ class Question(models.Model):
 
     def __str__(self):
         return "{}: {}".format(self.priority, self.question_text)
+
+class FormTemplate(models.Model):
+    name = models.CharField(max_length=200)
+    questions = models.ManyToManyField(Question)
+
+    def __str__(self):
+        return self.name
+
+class Professor(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+class Course(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+class Offer(models.Model):
+    professors = models.ManyToManyField(Professor)
+    course = models.ForeignKey(Course, on_delete=models.PROTECT)
+    
+    def __str__(self):
+        return "{} - {}".format(self.course, ", ".join(p.name for p in self.professors))
+
+class Major(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+class Semester(models.Model):
+    name = models.CharField(max_length=200)
+    semester = models.ManyToManyField(Offer)
+    major = models.ForeignKey(Major, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return "{} {} {}".format(self.major.name, self.name)
+
+
+
+
+
+
+    
