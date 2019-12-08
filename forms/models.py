@@ -3,18 +3,13 @@ from django.db import models
 from enum import Enum
 
 class QuestionType(Enum):   # A subclass of Enum
-    MULTIPLE_CHOICE = "Escolha múltima"
+    MULTIPLE_CHOICE = "Escolha múltipla"
     SINGLE_CHOICE = "Escolha única"
     OPEN_QUESTION = "Pergunta de texto aberta"
 
 # Create your models here.
 
-class QuestionTemplate(models.Model):
-    pass
-
-
 class Answer(models.Model):
-    question_templates = models.ManyToManyField(QuestionTemplate)
     answer_text = models.CharField(max_length=200)
     answer_type = models.CharField(
       max_length=5,
@@ -22,3 +17,7 @@ class Answer(models.Model):
     )
     priority = models.IntegerField(default=0)
 
+
+class QuestionTemplate(models.Model):
+    template_name=models.CharField(max_length=200)
+    answers = models.ManyToManyField(Answer)
