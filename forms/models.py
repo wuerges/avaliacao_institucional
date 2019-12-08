@@ -27,3 +27,12 @@ class QuestionTemplate(models.Model):
 
     def __str__(self):
         return self.template_name
+
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    priority = models.IntegerField(default=1)
+    question_template = models.ForeignKey(QuestionTemplate, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return "{}: {}".format(self.priority, self.question_text)
