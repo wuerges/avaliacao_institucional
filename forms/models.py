@@ -14,22 +14,15 @@ class QuestionType(Enum):   # A subclass of Enum
     PROF = "Pergunta para professor"
     COORD = "Pergunta para coordenação"
 
+from django.contrib.auth.models import User
+
 class Major(models.Model):
     name = models.CharField(max_length=200)
+    user = models.ForeignKey(User, related_name='major', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
 
-
-from django.contrib.auth.models import User
-from django.db import models
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    major = models.ManyToManyField(Major, related_name='profile')
-
-    def __str__(self):
-        return "{} - {}".format(self.user, ", ".join(m.name for m in self.major.all()))
 
 # Create your models here.
 
