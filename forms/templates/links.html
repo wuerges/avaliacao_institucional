@@ -9,16 +9,16 @@
         <h1>Links para aplicação do formulário para disciplinas:</h1>
 
         {% for a, o, c in courses %}
-            <p><a href="course/{{a.id}}/{{c.id}}"> {{a}} / {{c}}</a></p>
+            <p><a href="../course/{{a.id}}/{{c.id}}"> {{a}} / {{c}}</a></p>
         {% endfor %}
         
         <h1>Links para aplicação do formulário para professores:</h1>
         {% for a, o, p in profs %}
-            <p><a href="professor/{{a.id}}/{{o.id}}/{{p.id}}"> {{a}} / {{o.course}}/ {{p}}</a></p>
+            <p><a href="../professor/{{a.id}}/{{o.id}}/{{p.id}}"> {{a}} / {{o.course}}/ {{p}}</a></p>
         {% endfor %}
 
         <h1>Links para aplicação do formulário para curso:</h1>
-        <p> <a href="major/{{appl.id}}">  {{appl.semester}} </a> </p>
+        <p> <a href="../major/{{appl.id}}">  {{appl.semester}} </a> </p>
 
         
         

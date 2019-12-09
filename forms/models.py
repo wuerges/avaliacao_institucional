@@ -1,6 +1,7 @@
 from django.db import models
 
 from enum import Enum
+import json
 
 class AnswerType(Enum):   # A subclass of Enum
     MC = "Escolha múltipla"
@@ -58,6 +59,38 @@ class Question(models.Model):
 
     def __str__(self):
         return "{}: {}".format(self.priority, self.question_text)
+
+    def question_long_text(self, offer, prof):
+        base = ""
+        if self.question_template.question_type == QuestionType.DISC.name:
+            base += "[{}] ".format(offer.course.name)
+        if self.question_template.question_type == QuestionType.PROF.name:
+            base += "[{}] ".format(prof.name)
+
+        return base + self.question_text
+        
+
+    def name(self, offer, prof, appl):
+        print(self.question_template.question_type, QuestionType.DISC.name)
+
+        ret = {'type':self.question_template.question_type, 'text': self.question_text }
+
+        ret['semester__name'] = appl.semester.name
+        ret['semester__id'] = appl.semester.id
+        
+        ret['appl__id'] = appl.id
+        ret['major__name'] = appl.semester.major.name
+        ret['major__id'] = appl.semester.major.id
+
+        if self.question_template.question_type == QuestionType.DISC.name:
+            ret['course__name'] = offer.course.name
+            ret['course__id'] = offer.course.id
+        elif self.question_template.question_type == QuestionType.PROF.name:
+            ret['professor__name'] = prof.name
+            ret['professor__id'] = prof.id
+
+        return json.dumps(ret)
+
 
 class FormTemplate(models.Model):
     name = models.CharField(max_length=200)

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from .models import FormTemplate, FormApplication, QuestionType
+from .models import FormTemplate, FormApplication, QuestionType, Offer, Professor
 
 # Create your views here.
 
@@ -37,3 +37,13 @@ def form_links(request, form_application_id):
 
 
     return render(request, 'links.html', { 'appl': appl, 'courses': courses, 'profs': profs })
+
+
+def form_professor(request, app_id, offer_id, prof_id):
+    appl = FormApplication.objects.get(id=app_id)
+    offer = Offer.objects.get(id=offer_id)
+    prof = Professor.objects.get(id=prof_id)
+
+    questions = [(q.name(offer, prof, appl), q.question_long_text(offer, prof), q) for q in appl.form_template.ordered_questions()]
+
+    return render(request, 'prof.html', { 'questions': questions, 'appl': appl, 'offer': offer, 'prof': prof })
