@@ -35,7 +35,7 @@ class MajorAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(user=request.user)
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
         if not request.user.is_superuser and db_field.name == 'user':
             kwargs["queryset"] = User.objects.filter(id=request.user.id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
@@ -48,11 +48,11 @@ class FormApplicationAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(semester__major__in=request.user.profile.major.all())
+        return qs.filter(semester__major__user=request.user)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if not request.user.is_superuser and db_field.name == 'semester':
-            kwargs["queryset"] = Semester.objects.filter(major__in=request.user.profile.major.all())
+            kwargs["queryset"] = Semester.objects.filter(major__user=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(Semester)
@@ -63,8 +63,17 @@ class SemesterAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(major__in=request.user.profile.major.all())
+        return qs.filter(major__user=request.user)
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if not request.user.is_superuser and db_field.name == 'major':
+            kwargs["queryset"] = Major.objects.filter(user=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if not request.user.is_superuser and db_field.name == 'offer':
+            kwargs["queryset"] = Offer.objects.filter(major__user=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Professor)
@@ -75,11 +84,11 @@ class ProfessorAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(major__in=request.user.profile.major.all())
+        return qs.filter(major__user=request.user)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if not request.user.is_superuser and db_field.name == 'major':
-            kwargs["queryset"] = Major.objects.filter(profile=request.user.profile)
+            kwargs["queryset"] = Major.objects.filter(user=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(Offer)
@@ -90,13 +99,19 @@ class OfferAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(major__in=request.user.profile.major.all())
+        return qs.filter(major__user=request.user)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         
         if not request.user.is_superuser and db_field.name == 'professors':
-            majors = request.user.profile.major.all()
-            kwargs["queryset"] = Professor.objects.filter(majors__in=majors)
+            kwargs["queryset"] = Professor.objects.filter(major__user=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if not request.user.is_superuser and db_field.name == 'major':
+            kwargs["queryset"] = Major.objects.filter(user=request.user)
+        elif not request.user.is_superuser and db_field.name == 'course':
+            kwargs["queryset"] = Course.objects.filter(major__user=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
