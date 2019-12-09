@@ -48,14 +48,18 @@ class QuestionTemplate(models.Model):
         return "{}".format(self.template_name)
 
 
+def question_types():
+    return models.CharField(
+      max_length=5,
+      choices=[(tag.name, tag.value) for tag in QuestionType]  # Choices is a list of Tuple
+    )
+
+
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     priority = models.IntegerField(default=1)
     question_template = models.ForeignKey(QuestionTemplate, on_delete=models.PROTECT)
-    question_type = models.CharField(
-      max_length=5,
-      choices=[(tag.name, tag.value) for tag in QuestionType]  # Choices is a list of Tuple
-    )
+    question_type = question_types()
 
     def __str__(self):
         return "{}: {} ({})".format(self.priority, self.question_text, QuestionType[self.question_type].value)
@@ -73,19 +77,18 @@ class Question(models.Model):
     def name(self, offer, prof, appl):
         ret = {'type':self.question_type, 'text': self.question_text }
 
-        ret['semester__name'] = appl.semester.name
-        ret['semester__id'] = appl.semester.id
+        # ret['semester__name'] = appl.semester.name
+        # ret['semester__id'] = appl.semester.id
         
         ret['appl__id'] = appl.id
-        ret['major__name'] = appl.semester.major.name
-        ret['major__id'] = appl.semester.major.id
+        # ret['major__name'] = appl.semester.major.name
+        # ret['major__id'] = appl.semester.major.id
 
-        if self.question_type == QuestionType.DISC.name:
-            ret['course__name'] = offer.course.name
-            ret['course__id'] = offer.course.id
-        elif self.question_type == QuestionType.PROF.name:
-            ret['professor__name'] = prof.name
-            ret['professor__id'] = prof.id
+        # ret['course__name'] = offer.course.name
+        ret['offer__id'] = offer.id
+
+        # ret['professor__name'] = prof.name
+        ret['professor__id'] = prof.id
 
         return json.dumps(ret)
 
@@ -141,5 +144,13 @@ class FormApplication(models.Model):
 
     def __str__(self):
         return "{} - {}".format(self.semester, self.form_template)
+
+
+class FormSubmission(models.Model):
+    question_type = question_types()
+    form_application = models.ForeignKey(FormApplication, on_delete=models.PROTECT)
+    professor = models.ForeignKey(Professor, on_delete=models.PROTECT)
+    offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
+
 
 
