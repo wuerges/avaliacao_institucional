@@ -155,4 +155,9 @@ class FormSubmission(models.Model):
     text_answer = models.CharField(max_length=200)
 
 
+    def __str__(self):
+        return "Submission = {} {} {} {} {} {}".format(self.question_type, self.form_application, self.professor, \
+            self.offer, self.text_question, self.text_answer)
+
+
 

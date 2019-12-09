@@ -14,7 +14,8 @@
          {% endcomment %}
         <h1>Links para aplicação do formulário para professores:</h1>
         {% for a, o, p in profs %}
-            <p><a href="../professor/{{a.id}}/{{o.id}}/{{p.id}}"> {{a}} / {{o.course}}/ {{p}}</a></p>
+            <p><a href="../record/{{a.id}}/{{o.id}}/{{p.id}}"> {{a}} / {{o.course}}/ {{p}}</a></p>
+            <p><a href="../report/{{a.id}}/{{o.id}}/{{p.id}}"> {{a}} / {{o.course}}/ {{p}}</a></p>
         {% endfor %}
 
         {% comment %} <h1>Links para aplicação do formulário para curso:</h1>
