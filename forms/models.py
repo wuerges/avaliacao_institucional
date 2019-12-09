@@ -9,11 +9,11 @@ class AnswerType(Enum):   # A subclass of Enum
     OQ = "Pergunta de texto aberta"
 
 class QuestionType(Enum):   # A subclass of Enum
-    GERAL = "Pergunta geral sobre a instituição"
+    # GERAL = "Pergunta geral sobre a instituição"
     CURSO = "Pergunta geral do curso"
     DISC = "Pergunta para disciplinas"
     PROF = "Pergunta para professor"
-    COORD = "Pergunta para coordenação"
+    # COORD = "Pergunta para coordenação"
 
 from django.contrib.auth.models import User
 
