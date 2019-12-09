@@ -33,8 +33,36 @@
                     },
                     orientation: 'h'
                 };
+                var trace2 = {
+                    y: {{x|safe}},
+                    x: {{y|safe}},
+                    text : {{per|safe}},
+                    type: 'bar',
+                    hoverinfo: 'none',
+                    textposition: 'auto',
+                    marker: {
+                        line: {
+                            width: 1.5
+                        }
+                    },
+                    orientation: 'h'
+                };
+                var trace3 = {
+                    y: {{x|safe}},
+                    x: {{y|safe}},
+                    text : {{per|safe}},
+                    type: 'bar',
+                    hoverinfo: 'none',
+                    textposition: 'auto',
+                    marker: {
+                        line: {
+                            width: 1.5
+                        }
+                    },
+                    orientation: 'h'
+                };
 
-                var data = [trace1];
+                var data = [trace1, trace2, trace3];
 
                 var layout = {
                     barmode: 'group',
