@@ -43,22 +43,22 @@ class Answer(models.Model):
 class QuestionTemplate(models.Model):
     template_name=models.CharField(max_length=200)
     answers = models.ManyToManyField(Answer)
-    question_type = models.CharField(
-      max_length=5,
-      choices=[(tag.name, tag.value) for tag in QuestionType]  # Choices is a list of Tuple
-    )
 
     def __str__(self):
-        return "{} ({})".format(self.template_name,  QuestionType[self.question_type].value)
+        return "{}".format(self.template_name)
 
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     priority = models.IntegerField(default=1)
     question_template = models.ForeignKey(QuestionTemplate, on_delete=models.PROTECT)
+    question_type = models.CharField(
+      max_length=5,
+      choices=[(tag.name, tag.value) for tag in QuestionType]  # Choices is a list of Tuple
+    )
 
     def __str__(self):
-        return "{}: {}".format(self.priority, self.question_text)
+        return "{}: {} ({})".format(self.priority, self.question_text, QuestionType[self.question_type].value)
 
     def question_long_text(self, offer, prof):
         base = ""
