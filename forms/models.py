@@ -62,7 +62,8 @@ class Offer(models.Model):
     course = models.ForeignKey(Course, on_delete=models.PROTECT)
     
     def __str__(self):
-        return "{} - {}".format(self.course, ", ".join(p.name for p in self.professors))
+        return "{} - {}".format(self.course.name, ", ".join(p.name for p in self.professors.all()))
+        # return "{} - ".format(self.course.name)
 
 class Major(models.Model):
     name = models.CharField(max_length=200)
@@ -72,15 +73,11 @@ class Major(models.Model):
 
 class Semester(models.Model):
     name = models.CharField(max_length=200)
-    semester = models.ManyToManyField(Offer)
+    offer = models.ManyToManyField(Offer)
     major = models.ForeignKey(Major, on_delete=models.PROTECT)
 
     def __str__(self):
-        return "{} {} {}".format(self.major.name, self.name)
-
-
-
-
+        return "{} - {}".format(self.major.name, self.name)
 
 
     
