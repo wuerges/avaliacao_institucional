@@ -26,7 +26,7 @@ from django.db import models
 
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    major = models.ManyToManyField(Major)
+    major = models.ManyToManyField(Major, related_name='profile')
 
     def __str__(self):
         return "{} - {}".format(self.user, ", ".join(m.name for m in self.major.all()))
@@ -74,6 +74,7 @@ class FormTemplate(models.Model):
 
 class Professor(models.Model):
     name = models.CharField(max_length=200)
+    major = models.ManyToManyField(Major, related_name='professors')
 
     def __str__(self):
         return self.name
@@ -90,6 +91,7 @@ class Course(models.Model):
 class Offer(models.Model):
     professors = models.ManyToManyField(Professor)
     course = models.ForeignKey(Course, on_delete=models.PROTECT)
+    major = models.ForeignKey(Major, on_delete=models.PROTECT)
     
     def __str__(self):
         return "{} - {}".format(self.course.name, ", ".join(p.name for p in self.professors.all()))
