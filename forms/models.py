@@ -79,7 +79,7 @@ class Professor(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
-    major = models.ManyToManyField(Major)
+    major = models.ManyToManyField(Major, related_name='courses')
 
     def __str__(self):
         return self.name

@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Basic Site Template</title>
+    </head>
+
+    <body>
+        <h1>Links para aplicação do formulário para disciplinas:</h1>
+
+        {% for a, o, c in courses %}
+            <p><a href="course/{{a.id}}/{{c.id}}"> {{a}} / {{c}}</a></p>
+        {% endfor %}
+        
+        <h1>Links para aplicação do formulário para professores:</h1>
+        {% for a, o, p in profs %}
+            <p><a href="professor/{{a.id}}/{{o.id}}/{{p.id}}"> {{a}} / {{o.course}}/ {{p}}</a></p>
+        {% endfor %}
+
+        <h1>Links para aplicação do formulário para curso:</h1>
+        <p> <a href="major/{{appl.id}}">  {{appl.semester}} </a> </p>
+
+        
+        
+        {% comment %} <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre> {% endcomment %}
+    </body>
+</html>
