@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from .models import FormTemplate, FormApplication, QuestionType, Offer, Professor
+from .models import FormTemplate, FormApplication, QuestionType, Offer, Professor, FormSubmission
+import json
 
 # Create your views here.
 
@@ -48,4 +49,23 @@ def form_professor(request, app_id, offer_id, prof_id):
 
         return render(request, 'prof.html', { 'questions': questions, 'appl': appl, 'offer': offer, 'prof': prof })
     if request.method == 'POST':
-        return render(request, 'answer.html', {})
+
+        for k, v in request.POST.items():
+            try:
+                key = json.loads(k)
+                print("decode json", key, v)
+                sub = FormSubmission.objects.create(
+                    question_type=key['type'],
+                    form_application=key['appl__id'],
+                    offer=key['offer__id'],
+                    prof=key['professor__id'],
+                    text_question=key['text'],
+                    text_answer=v
+                )
+                sub.save()
+
+            except json.JSONDecodeError:
+                pass
+
+
+        return render(request, 'answer.html', dict(request.POST.items()))

@@ -148,9 +148,11 @@ class FormApplication(models.Model):
 
 class FormSubmission(models.Model):
     question_type = question_types()
-    form_application = models.ForeignKey(FormApplication, on_delete=models.PROTECT)
-    professor = models.ForeignKey(Professor, on_delete=models.PROTECT)
+    form_application = models.ForeignKey(FormApplication, on_delete=models.PROTECT, related_name='submissions')
+    professor = models.ForeignKey(Professor, on_delete=models.PROTECT, related_name='submissions')
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
+    text_question = models.CharField(max_length=200)
+    text_answer = models.CharField(max_length=200)
 
 
 
