@@ -2,7 +2,8 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Answer, QuestionTemplate, Question, Professor, \
-    Semester, Major, Offer, Course, Professor, FormTemplate
+    Semester, Major, Offer, Course, Professor, FormTemplate, \
+        FormApplication
 
 admin.site.register(Answer)
 admin.site.register(QuestionTemplate)
@@ -13,3 +14,4 @@ admin.site.register(Offer)
 admin.site.register(Course)
 admin.site.register(Professor)
 admin.site.register(FormTemplate)
+admin.site.register(FormApplication)
