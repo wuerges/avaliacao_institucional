@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Basic Site Template</title>
+    </head>
+
+    <body>
+        <form method="POST">
+        <h1>{{ tmpl.name }}</h1>
+        {% for question in tmpl.ordered_questions %}
+            <h2>{{ question.question_text }} </h2>
+            <ol>
+            {% for answer in question.question_template.answers.all %}
+                <li>
+                {% if answer.answer_type == 'MC' %}
+                    <input type="checkbox" name="{{question.question_text}}" value="{{answer.answer_text}}" />
+                    {{ answer.answer_text }} 
+                {% elif answer.answer_type == 'SC' %}
+                    <input type="radio" name="{{question.question_text}}" value="{{answer.answer_text}}" />
+                    {{ answer.answer_text }} 
+                {% else %}
+                    <p>{{ answer.answer_text }} </p>
+                    <textarea name="{{question.question_text}}" ></textarea>
+                {% endif%}
+                </li>
+
+            {% endfor %}
+            </ol>
+        {% endfor %}
+        {% csrf_token %}
+        <input type="submit" />
+        </form>
+    </body>
+</html>

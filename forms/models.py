@@ -66,6 +66,9 @@ class FormTemplate(models.Model):
     def __str__(self):
         return self.name
 
+    def ordered_questions(self):
+        return self.questions.order_by('priority')
+
 class Professor(models.Model):
     name = models.CharField(max_length=200)
     major = models.ManyToManyField(Major, related_name='professors')

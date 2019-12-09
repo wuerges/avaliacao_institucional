@@ -4,5 +4,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('preview/<int:form_template_id>', views.form_preview, name='preview')
 ]
 
