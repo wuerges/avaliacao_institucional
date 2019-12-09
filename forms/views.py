@@ -56,9 +56,9 @@ def form_professor(request, app_id, offer_id, prof_id):
                 print("decode json", key, v)
                 sub = FormSubmission.objects.create(
                     question_type=key['type'],
-                    form_application=key['appl__id'],
-                    offer=key['offer__id'],
-                    prof=key['professor__id'],
+                    form_application=FormApplication.objects.get(id=key['appl__id']),
+                    offer=Offer.objects.get(id=key['offer__id']),
+                    professor=Professor.objects.get(id=key['professor__id']),
                     text_question=key['text'],
                     text_answer=v
                 )

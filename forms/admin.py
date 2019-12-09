@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 # Register your models here.
 from .models import Answer, QuestionTemplate, Question, Professor, \
     Semester, Major, Offer, Course, Professor, FormTemplate, \
-        FormApplication
+        FormApplication, FormSubmission
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -125,3 +125,5 @@ admin.site.register(Question)
 # admin.site.register(Professor)
 admin.site.register(FormTemplate)
 # admin.site.register(FormApplication)
+
+admin.site.register(FormSubmission)
