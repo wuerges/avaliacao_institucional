@@ -62,18 +62,16 @@ class Question(models.Model):
 
     def question_long_text(self, offer, prof):
         base = ""
-        if self.question_template.question_type == QuestionType.DISC.name:
+        if self.question_type == QuestionType.DISC.name:
             base += "[{}] ".format(offer.course.name)
-        if self.question_template.question_type == QuestionType.PROF.name:
+        if self.question_type == QuestionType.PROF.name:
             base += "[{}] ".format(prof.name)
 
         return base + self.question_text
         
 
     def name(self, offer, prof, appl):
-        print(self.question_template.question_type, QuestionType.DISC.name)
-
-        ret = {'type':self.question_template.question_type, 'text': self.question_text }
+        ret = {'type':self.question_type, 'text': self.question_text }
 
         ret['semester__name'] = appl.semester.name
         ret['semester__id'] = appl.semester.id
@@ -82,10 +80,10 @@ class Question(models.Model):
         ret['major__name'] = appl.semester.major.name
         ret['major__id'] = appl.semester.major.id
 
-        if self.question_template.question_type == QuestionType.DISC.name:
+        if self.question_type == QuestionType.DISC.name:
             ret['course__name'] = offer.course.name
             ret['course__id'] = offer.course.id
-        elif self.question_template.question_type == QuestionType.PROF.name:
+        elif self.question_type == QuestionType.PROF.name:
             ret['professor__name'] = prof.name
             ret['professor__id'] = prof.id
 

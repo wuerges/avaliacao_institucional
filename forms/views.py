@@ -17,7 +17,6 @@ def form_preview(request, form_template_id):
         return render(request, 'preview.html', {'tmpl': tmpl})
 
     if request.method == 'POST':
-        print(request)
         return render(request, 'answer.html', {})
 
 
@@ -40,10 +39,13 @@ def form_links(request, form_application_id):
 
 
 def form_professor(request, app_id, offer_id, prof_id):
-    appl = FormApplication.objects.get(id=app_id)
-    offer = Offer.objects.get(id=offer_id)
-    prof = Professor.objects.get(id=prof_id)
+    if request.method == 'GET':
+        appl = FormApplication.objects.get(id=app_id)
+        offer = Offer.objects.get(id=offer_id)
+        prof = Professor.objects.get(id=prof_id)
 
-    questions = [(q.name(offer, prof, appl), q.question_long_text(offer, prof), q) for q in appl.form_template.ordered_questions()]
+        questions = [(q.name(offer, prof, appl), q.question_long_text(offer, prof), q) for q in appl.form_template.ordered_questions()]
 
-    return render(request, 'prof.html', { 'questions': questions, 'appl': appl, 'offer': offer, 'prof': prof })
+        return render(request, 'prof.html', { 'questions': questions, 'appl': appl, 'offer': offer, 'prof': prof })
+    if request.method == 'POST':
+        return render(request, 'answer.html', {})
