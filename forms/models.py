@@ -14,6 +14,23 @@ class QuestionType(Enum):   # A subclass of Enum
     PROF = "Pergunta para professor"
     COORD = "Pergunta para coordenação"
 
+class Major(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+from django.contrib.auth.models import User
+from django.db import models
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    major = models.ManyToManyField(Major)
+
+    def __str__(self):
+        return "{} - {}".format(self.user, ", ".join(m.name for m in self.major.all()))
+
 # Create your models here.
 
 class Answer(models.Model):
@@ -61,8 +78,10 @@ class Professor(models.Model):
     def __str__(self):
         return self.name
 
+
 class Course(models.Model):
     name = models.CharField(max_length=200)
+    major = models.ManyToManyField(Major)
 
     def __str__(self):
         return self.name
@@ -76,11 +95,6 @@ class Offer(models.Model):
         return "{} - {}".format(self.course.name, ", ".join(p.name for p in self.professors.all()))
         # return "{} - ".format(self.course.name)
 
-class Major(models.Model):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
 
 class Semester(models.Model):
     name = models.CharField(max_length=200)
@@ -97,3 +111,5 @@ class FormApplication(models.Model):
 
     def __str__(self):
         return "{} - {}".format(self.semester, self.form_template)
+
+

@@ -1,17 +1,24 @@
 from django.contrib import admin
 
+class MyAdminSite(admin.AdminSite):
+    site_header = 'Monty Python administration'
+
+my_admin_site = MyAdminSite(name='myadmin')
+
+
 # Register your models here.
 from .models import Answer, QuestionTemplate, Question, Professor, \
     Semester, Major, Offer, Course, Professor, FormTemplate, \
-        FormApplication
+        FormApplication, Profile
 
-admin.site.register(Answer)
-admin.site.register(QuestionTemplate)
-admin.site.register(Question)
-admin.site.register(Semester)
-admin.site.register(Major)
-admin.site.register(Offer)
-admin.site.register(Course)
-admin.site.register(Professor)
-admin.site.register(FormTemplate)
-admin.site.register(FormApplication)
+my_admin_site.register(Answer)
+my_admin_site.register(QuestionTemplate)
+my_admin_site.register(Question)
+my_admin_site.register(Semester)
+my_admin_site.register(Major)
+my_admin_site.register(Offer)
+my_admin_site.register(Course)
+my_admin_site.register(Professor)
+my_admin_site.register(FormTemplate)
+my_admin_site.register(FormApplication)
+my_admin_site.register(Profile)
