@@ -100,7 +100,7 @@ def form_report(request, app_id, offer_id, prof_id):
     questions = defaultdict(dict)
 
     group_submissions(recs, 'CCR', questions)
-    group_submissions(recs, 'Curso', questions)
+    group_submissions(recs_geral, 'Curso', questions)
 
     questions = [(k, [(c, x, y, p) for (c, (x, y, p)) in v.items()]) for (k,v) in questions.items()]
 
