@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from collections import defaultdict 
 import pandas as pd
 import tempfile as tf
 
@@ -73,10 +74,9 @@ def form_record(request, app_id, offer_id, prof_id):
         return render(request, 'answer.html', dict(request.POST.items()))
 
 
-def group_submissions(recs):
+def group_submissions(recs, name, group):
     data_frame = pd.DataFrame([[r.question_type, r.text_question, r.text_answer] for r in recs])
     data_frame.columns = ["TYPE", "QUESTION", "ANSWER"]
-    questions = []
     for ((q, t), g) in data_frame.groupby(["QUESTION", "TYPE"]):
         gr = g.drop("TYPE",axis=1).groupby(["ANSWER"]).count()
 
@@ -85,9 +85,8 @@ def group_submissions(recs):
         y = list(100 * gr['QUESTION'][x] / tot)
         p = list(gr['QUESTION'][x])
         
-        questions.append((q, t, x, y, p))
+        group[q][name] = (x, y, p)
 
-    return questions
 
 
 def form_report(request, app_id, offer_id, prof_id):
@@ -96,17 +95,13 @@ def form_report(request, app_id, offer_id, prof_id):
     prof = Professor.objects.get(id=prof_id)
 
     recs = FormSubmission.objects.filter(form_application__id=app_id, offer__id=offer_id, professor__id=prof_id)
+    recs_geral = FormSubmission.objects.filter(form_application__id=app_id)
 
-    # data_frame = pd.DataFrame([[r.question_type, r.form_application, r.offer, r.professor, r.text_question, r.text_answer] for r in recs])
-    # data_frame.columns = ["TYPE", "APP", "OFFER", "PROF", "QUESTION", "ANSWER"]
+    questions = defaultdict(dict)
 
-    # data_frame = pd.DataFrame([[r.question_type, r.text_question, r.text_answer] for r in recs])
-    # data_frame.columns = ["TYPE", "QUESTION", "ANSWER"]
+    group_submissions(recs, 'CCR', questions)
+    group_submissions(recs, 'Curso', questions)
 
-
-    # questions = [(q, g["TYPE"].values[0], g.groupby(g["ANSWER"]).count()) for (q, g) in data_frame.groupby(data_frame["QUESTION"])]
-    # questions = [(q, t, g.drop("TYPE",axis=1).groupby(["ANSWER"]).count()) for ((q, t), g) in data_frame.groupby(["QUESTION", "TYPE"])]
-
-    questions = group_submissions(recs)
+    questions = [(k, [(c, x, y, p) for (c, (x, y, p)) in v.items()]) for (k,v) in questions.items()]
 
     return render(request, 'report.html', {'questions': questions})

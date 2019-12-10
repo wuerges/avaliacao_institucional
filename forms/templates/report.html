@@ -11,15 +11,20 @@
 
 
 
-        {% for q, t, x, y, per in questions %}
+        {% for q, v in questions %}
             <h3> {{q}} </h3>
+
+
             {% comment %} <p> G= {{per}} </p> {% endcomment %}
             <div id="{{q}}" style="width:800px;height:600px;"></div>
             <script>
                 {% comment %} var x = ["Apples","Apples","Apples","Organges", "Bananas"]
                 var y = ["5","10","3","10","5"] {% endcomment %}
 
-                var trace1 = {
+                var data = [];
+            {% for trace, x, y, per in v %}
+                
+                var {{trace|safe}} = {
                     y: {{x|safe}},
                     x: {{y|safe}},
                     text : {{per|safe}},
@@ -33,36 +38,10 @@
                     },
                     orientation: 'h'
                 };
-                var trace2 = {
-                    y: {{x|safe}},
-                    x: {{y|safe}},
-                    text : {{per|safe}},
-                    type: 'bar',
-                    hoverinfo: 'none',
-                    textposition: 'auto',
-                    marker: {
-                        line: {
-                            width: 1.5
-                        }
-                    },
-                    orientation: 'h'
-                };
-                var trace3 = {
-                    y: {{x|safe}},
-                    x: {{y|safe}},
-                    text : {{per|safe}},
-                    type: 'bar',
-                    hoverinfo: 'none',
-                    textposition: 'auto',
-                    marker: {
-                        line: {
-                            width: 1.5
-                        }
-                    },
-                    orientation: 'h'
-                };
+                data.push({{trace|safe}});
+            {% endfor %}
 
-                var data = [trace1, trace2, trace3];
+                {% comment %} var data = [trace1, trace2, trace3]; {% endcomment %}
 
                 var layout = {
                     barmode: 'group',
@@ -73,7 +52,7 @@
             </script>
         {% endfor%}
 
-        {% comment %} <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre> {% endcomment %}
+        <pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre>
 
     </body>
 </html>
